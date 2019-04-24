@@ -1,426 +1,304 @@
-" Fisa-vim-config
-" http://fisadev.github.io/fisa-vim-config/
-" version: 8.2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Sets how many lines of history VIM has to remember
+set history=700
+set cursorline
 
-" ============================================================================
-" Vim-plug initialization
-" Avoid modify this section, unless you are very sure of what you are doing
-
-let vim_plug_just_installed = 0
-let vim_plug_path = expand('~/.vim/autoload/plug.vim')
-if !filereadable(vim_plug_path)
-    echo "Installing Vim-plug..."
-    echo ""
-    silent !mkdir -p ~/.vim/autoload
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    let vim_plug_just_installed = 1
-endif
-
-" manually load vim-plug the first time
-if vim_plug_just_installed
-    :execute 'source '.fnameescape(vim_plug_path)
-endif
-
-" Obscure hacks done, you can now modify the rest of the .vimrc as you wish :)
-
-" ============================================================================
-" Active plugins
-" You can disable or add new ones here:
-
-" this needs to be here, so vim-plug knows we are declaring the plugins we
-" want to use
-call plug#begin('~/.vim/plugged')
-
-" Plugins from github repos:
-
-" Override configs by directory 
-Plug 'arielrossanigo/dir-configs-override.vim'
-" Better file browser
-Plug 'scrooloose/nerdtree'
-" Code commenter
-Plug 'scrooloose/nerdcommenter'
-" Class/module browser
-Plug 'majutsushi/tagbar'
-" Code and files fuzzy finder
-Plug 'ctrlpvim/ctrlp.vim'
-" Extension to ctrlp, for fuzzy command finder
-Plug 'fisadev/vim-ctrlp-cmdpalette'
-" Zen coding
-Plug 'mattn/emmet-vim'
-" Git integration
-Plug 'motemen/git-vim'
-" Tab list panel
-Plug 'kien/tabman.vim'
-" Airline
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-" Terminal Vim with 256 colors colorscheme
-Plug 'fisadev/fisa-vim-colorscheme'
-" Consoles as buffers
-Plug 'rosenfeld/conque-term'
-" Pending tasks list
-Plug 'fisadev/FixedTaskList.vim'
-" Surround
-Plug 'tpope/vim-surround'
-" Autoclose
-Plug 'Townk/vim-autoclose'
-" Indent text object
-Plug 'michaeljsmith/vim-indent-object'
-" Indentation based movements
-Plug 'jeetsukumaran/vim-indentwise'
-" Python mode (indentation, doc, refactor, lints, code checking, motion and
-" operators, highlighting, run and ipdb breakpoints)
-Plug 'klen/python-mode'
-" Better autocompletion
-Plug 'Shougo/neocomplcache.vim'
-" Snippets manager (SnipMate), dependencies, and snippets repo
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'honza/vim-snippets'
-Plug 'garbas/vim-snipmate'
-" Git/mercurial/others diff icons on the side of the file lines
-Plug 'mhinz/vim-signify'
-" Automatically sort python imports
-Plug 'fisadev/vim-isort'
-" Drag visual blocks arround
-Plug 'fisadev/dragvisuals.vim'
-" Window chooser
-Plug 't9md/vim-choosewin'
-" Python and other languages code checker
-Plug 'scrooloose/syntastic'
-" Paint css colors with the real color
-Plug 'lilydjwg/colorizer'
-" Ack code search (requires ack installed in the system)
-Plug 'mileszs/ack.vim'
-
-if has('python')
-    " YAPF formatter for Python
-    Plug 'pignacio/vim-yapf-format'
-endif
-" Relative numbering of lines (0 is the current line)
-" (disabled by default because is very intrusive and can't be easily toggled
-" on/off. When the plugin is present, will always activate the relative 
-" numbering every time you go to normal mode. Author refuses to add a setting 
-" to avoid that)
-" Plug 'myusuf3/numbers.vim'
-
-" Plugins from vim-scripts repos:
-
-" Search results counter
-Plug 'IndexedSearch'
-" XML/HTML tags navigation
-Plug 'matchit.zip'
-" Gvim colorscheme
-Plug 'Wombat'
-" Yank history navigation
-Plug 'YankRing.vim'
-
-Plug 'fatih/vim-go'
-
-" Plug 'derekwyatt/vim-scala'
-
-" Tell vim-plug we finished declaring plugins, so it can load them
-call plug#end()
-
-" ============================================================================
-" Install plugins the first time vim runs
-
-if vim_plug_just_installed
-    echo "Installing Bundles, please ignore key map error messages"
-    :PlugInstall
-endif
-
-" ============================================================================
-" Vim settings and mappings
-" You can edit them as you wish
-
-" no vi-compatible
-set nocompatible
-
-" allow plugins by file type (required for plugins!)
+" Enable filetype plugin
 filetype plugin on
 filetype indent on
 
-" tabs and spaces handling
-set expandtab
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+let mapleader =","
+let g:mapleader = ","
 
-" tab length exceptions on some file types
-autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2
-
-" always show status bar
-set ls=2
-
-" incremental search
-set incsearch
-" highlighted search results
-set hlsearch
-
-" syntax highlight on
 syntax on
+set hlsearch 
+set cursorline
+set backspace=indent,eol,start
+set splitright
 
-" show line numbers
-set nu
-
-set noswapfile
-set nobackup
-" set smartindent
-" set autoindent
-
-" tab navigation mappings
-map tn :tabn<CR>
-map tp :tabp<CR>
-map tm :tabm 
-map tt :tabnew 
-map ts :tab split<CR>
-map <C-S-Right> :tabn<CR>
-imap <C-S-Right> <ESC>:tabn<CR>
-map <C-S-Left> :tabp<CR>
-imap <C-S-Left> <ESC>:tabp<CR>
-
-" navigate windows with meta+arrows
-map <M-Right> <c-w>l
-map <M-Left> <c-w>h
-map <M-Up> <c-w>k
-map <M-Down> <c-w>j
-imap <M-Right> <ESC><c-w>l
-imap <M-Left> <ESC><c-w>h
-imap <M-Up> <ESC><c-w>k
-imap <M-Down> <ESC><c-w>j
-
-" old autocomplete keyboard shortcut
-imap <C-J> <C-X><C-O>
-
-" Comment this line to enable autocompletion preview window
-" (displays documentation related to the selected completion option)
-" Disabled by default because preview makes the window flicker
-set completeopt-=preview
-
-" save as sudo
-ca w!! w !sudo tee "%"
-
-" simple recursive grep
-nmap ,r :Ack 
-nmap ,wr :Ack <cword><CR>
-
-" use 256 colors when possible
-if (&term =~? 'mlterm\|xterm\|xterm-256\|screen-256') || has('nvim')
-	let &t_Co = 256
-    colorscheme fisa
-else
-    colorscheme delek
-endif
-
-" colors for gvim
-if has('gui_running')
-    colorscheme wombat
-endif
-
-" when scrolling, keep cursor 3 lines away from screen border
-set scrolloff=3
-
-" autocompletion of files and commands behaves like shell
-" (complete only the common part, list the options that match)
-set wildmode=list:longest
-
-" better backup, swap and undos storage
-set directory=~/.vim/dirs/tmp     " directory to place swap files in
-set backup                        " make backup files
-set backupdir=~/.vim/dirs/backups " where to put backup files
-set undofile                      " persistent undos - undo after you re-open the file
-set undodir=~/.vim/dirs/undos
-set viminfo+=n~/.vim/dirs/viminfo
-" store yankring history file there too
-let g:yankring_history_dir = '~/.vim/dirs/'
-
-" create needed directories if they don't exist
-if !isdirectory(&backupdir)
-    call mkdir(&backupdir, "p")
-endif
-if !isdirectory(&directory)
-    call mkdir(&directory, "p")
-endif
-if !isdirectory(&undodir)
-    call mkdir(&undodir, "p")
-endif
-
-" ============================================================================
-" Plugins settings and mappings
-" Edit them as you wish.
-
-" Tagbar ----------------------------- 
-
-" toggle tagbar display
-map <F4> :TagbarToggle<CR>
-" autofocus on tagbar open
-let g:tagbar_autofocus = 1
-
-" NERDTree ----------------------------- 
-
-" toggle nerdtree display
-map <F3> :NERDTreeToggle<CR>
-" open nerdtree with the current file selected
-nmap ,t :NERDTreeFind<CR>
-" don;t show these file types
-let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
-
-
-" Tasklist ------------------------------
-
-" show pending tasks list
-map <F2> :TaskList<CR>
-
-" CtrlP ------------------------------
-
-" file finder mapping
-let g:ctrlp_map = ',e'
-" tags (symbols) in current file finder mapping
-nmap ,g :CtrlPBufTag<CR>
-" tags (symbols) in all files finder mapping
-nmap ,G :CtrlPBufTagAll<CR>
-" general code finder in all files mapping
-nmap ,f :CtrlPLine<CR>
-" recent files finder mapping
-nmap ,m :CtrlPMRUFiles<CR>
-" commands finder mapping
-nmap ,c :CtrlPCmdPalette<CR>
-" to be able to call CtrlP with default search text
-function! CtrlPWithSearchText(search_text, ctrlp_command_end)
-    execute ':CtrlP' . a:ctrlp_command_end
-    call feedkeys(a:search_text)
+" Platform
+function! MySys()
+    return "linux"
 endfunction
-" same as previous mappings, but calling with current word as default text
-nmap ,wg :call CtrlPWithSearchText(expand('<cword>'), 'BufTag')<CR>
-nmap ,wG :call CtrlPWithSearchText(expand('<cword>'), 'BufTagAll')<CR>
-nmap ,wf :call CtrlPWithSearchText(expand('<cword>'), 'Line')<CR>
-nmap ,we :call CtrlPWithSearchText(expand('<cword>'), '')<CR>
-nmap ,pe :call CtrlPWithSearchText(expand('<cfile>'), '')<CR>
-nmap ,wm :call CtrlPWithSearchText(expand('<cword>'), 'MRUFiles')<CR>
-nmap ,wc :call CtrlPWithSearchText(expand('<cword>'), 'CmdPalette')<CR>
-" don't change working directory
-let g:ctrlp_working_path_mode = 0
-" ignore these files and folders on file finder
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
-  \ 'file': '\.pyc$\|\.pyo$',
-  \ }
 
-" Syntastic ------------------------------
+function! SwitchToBuf(filename)
+    "let fullfn = substitute(a:filename, "^\\~/", $HOME . "/", "")
+    " find in current tab
+    let bufwinnr = bufwinnr(a:filename)
+    if bufwinnr != -1
+        exec bufwinnr . "wincmd w"
+        return
+    else
+        " find in each tab
+        tabfirst
+        let tab = 1
+        while tab <= tabpagenr("$")
+            let bufwinnr = bufwinnr(a:filename)
+            if bufwinnr != -1
+                exec "normal " . tab . "gt"
+                exec bufwinnr . "wincmd w"
+                return
+            endif
+            tabnext
+            let tab = tab + 1
+        endwhile
+        " not exist, new tab
+        exec "tabnew " . a:filename
+    endif
+endfunction
 
-" show list of errors and warnings on the current file
-nmap <leader>e :Errors<CR>
-" check also when just opened the file
-let g:syntastic_check_on_open = 1
-" don't put icons on the sign column (it hides the vcs status icons of signify)
-let g:syntastic_enable_signs = 0
-" custom icons (enable them if you use a patched font, and enable the previous 
-" setting)
-"let g:syntastic_error_symbol = '✗'
-"let g:syntastic_warning_symbol = '⚠'
-"let g:syntastic_style_error_symbol = '✗'
-"let g:syntastic_style_warning_symbol = '⚠'
+"Fast edit vimrc
+if MySys() == 'linux'
+    "Fast reloading of the .vimrc
+    map <silent> <leader>ss :source ~/.vimrc<cr>
+    "Fast editing of .vimrc
+    map <silent> <leader>ee :call SwitchToBuf("~/.vimrc")<cr>
+    "When .vimrc is edited, reload it
+    autocmd! bufwritepost .vimrc source ~/.vimrc
+elseif MySys() == 'windows'
+    " Set helplang
+    set helplang=cn
+    "Fast reloading of the _vimrc
+    map <silent> <leader>ss :source ~/_vimrc<cr>
+    "Fast editing of _vimrc
+    map <silent> <leader>ee :call SwitchToBuf("~/_vimrc")<cr>
+    "When _vimrc is edited, reload it
+    autocmd! bufwritepost _vimrc source ~/_vimrc
+endif
 
-" Python-mode ------------------------------
+" For windows version
+if MySys() == 'windows'
+    source $VIMRUNTIME/mswin.vim
+    behave mswin
+endif 
 
-" don't use linter, we use syntastic for that
-let g:pymode_lint_on_write = 0
-let g:pymode_lint_signs = 0
-" don't fold python code on open
-let g:pymode_folding = 0
-" don't load rope by default. Change to 1 to use rope
-let g:pymode_rope = 0
-" open definitions on same window, and custom mappings for definitions and
-" occurrences
-let g:pymode_rope_goto_definition_bind = ',d'
-let g:pymode_rope_goto_definition_cmd = 'e'
-nmap ,D :tab split<CR>:PymodePython rope.goto()<CR>
-nmap ,o :RopeFindOccurrences<CR>
 
-" NeoComplCache ------------------------------
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Colors and Fonts
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+syntax enable "Enable syntax hl
 
-" most of them not documented because I'm not sure how they work
-" (docs aren't good, had to do a lot of trial and error to make 
-" it play nice)
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_ignore_case = 1
-let g:neocomplcache_enable_smart_case = 1
-let g:neocomplcache_enable_auto_select = 1
-let g:neocomplcache_enable_fuzzy_completion = 1
-let g:neocomplcache_enable_camel_case_completion = 1
-let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_fuzzy_completion_start_length = 1
-let g:neocomplcache_auto_completion_start_length = 1
-let g:neocomplcache_manual_completion_start_length = 1
-let g:neocomplcache_min_keyword_length = 1
-let g:neocomplcache_min_syntax_length = 1
-" complete with workds from any opened file
-let g:neocomplcache_same_filetype_lists = {}
-let g:neocomplcache_same_filetype_lists._ = '_'
+" Set font according to system
+if MySys() == "mac"
+  set gfn=Menlo:h14
+  set shell=/bin/bash
+elseif MySys() == "windows"
+  set gfn=Bitstream\ Vera\ Sans\ Mono:h10
+elseif MySys() == "linux"
+  set gfn=Monospace\ 10
+  set shell=/bin/bash
+endif
 
-" TabMan ------------------------------
+if has("gui_running")
+  set guioptions-=T
+  set t_Co=256
 
-" mappings to toggle display, and to focus on it
-let g:tabman_toggle = 'tl'
-let g:tabman_focus  = 'tf'
+  set background=dark
+  colorscheme peaksea
 
-" Autoclose ------------------------------
+  set nonu
+else
+  colorscheme zellner
+  set background=dark
+  "set nonu
+  set nu
+endif
 
-" Fix to let ESC work as espected with Autoclose plugin
-let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
+set encoding=utf8
+try
+    lang en_US
+catch
+endtry
 
-" DragVisuals ------------------------------
+set ffs=unix,dos,mac "Default file types
 
-" mappings to move blocks in 4 directions
-vmap <expr> <S-M-LEFT> DVB_Drag('left')
-vmap <expr> <S-M-RIGHT> DVB_Drag('right')
-vmap <expr> <S-M-DOWN> DVB_Drag('down')
-vmap <expr> <S-M-UP> DVB_Drag('up')
-" mapping to duplicate block
-vmap <expr> D DVB_Duplicate()
+""""""""""""""""""""""""""""""
+" => Statusline
+""""""""""""""""""""""""""""""
+" Always hide the statusline
+set laststatus=2
 
-" Signify ------------------------------
+" Format the statusline
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L:%c
 
-" this first setting decides in which order try to guess your current vcs
-" UPDATE it to reflect your preferences, it will speed up opening files
-let g:signify_vcs_list = [ 'git', 'hg' ]
-" mappings to jump to changed blocks
-nmap <leader>sn <plug>(signify-next-hunk)
-nmap <leader>sp <plug>(signify-prev-hunk)
-" nicer colors
-highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
-highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
-highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
-highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
-highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
-highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
-" Window Chooser ------------------------------
+function! CurDir()
+    let curdir = substitute(getcwd(), '/Users/amir/', "~/", "g")
+    return curdir
+endfunction
 
-" mapping
-nmap  -  <Plug>(choosewin)
-" show big letters
-let g:choosewin_overlay_enable = 1
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    else
+        return ''
+    endif
+endfunction
 
-" Airline ------------------------------
 
-let g:airline_powerline_fonts = 0
-let g:airline_theme = 'bubblegum'
-let g:airline_theme = 'wombat'
-let g:airline#extensions#whitespace#enabled = 0
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text, tab and indent related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set expandtab
+set shiftwidth=4
+set tabstop=4
+set smarttab
 
-" to use fancy symbols for airline, uncomment the following lines and use a
-" patched font (more info on the README.rst)
-"if !exists('g:airline_symbols')
-"   let g:airline_symbols = {}
-"endif
-"let g:airline_left_sep = '⮀'
-"let g:airline_left_alt_sep = '⮁'
-"let g:airline_right_sep = '⮂'
-"let g:airline_right_alt_sep = '⮃'
-"let g:airline_symbols.branch = '⭠'
-"let g:airline_symbols.readonly = '⭤'
-"let g:airline_symbols.linenr = '⭡'
+set lbr
+set tw=500
+
+set ai "Auto indent
+set si "Smart indet
+set wrap "Wrap lines
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => windows
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Smart way to move btw. windows
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"=>ctags
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set tags=tags;
+set autochdir
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"=>Cscope tool
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has("cscope")
+    set cscopetag   " 使支持用 Ctrl+]  和 Ctrl+t 快捷键在代码间跳来跳去
+    " check cscope for definition of a symbol before checking ctags:
+    " set to 1 if you want the reverse search order.
+    set csto=1
+
+    " add any cscope database in current directory
+    if filereadable("cscope.out")
+        cs add cscope.out
+    " else add the database pointed to by environment variable
+    elseif $CSCOPE_DB != ""
+        cs add $CSCOPE_DB
+    endif
+
+    " show msg when any other cscope db added
+    set cscopeverbose
+
+"   nmap <C-/>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+"   nmap <C-/>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+"   nmap <C-/>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+"   nmap <C-/>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+"   nmap <C-/>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+"   nmap <C-/>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+"   nmap <C-/>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+"   nmap <C-/>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"=>TagList tool
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"map wm :TlistOpen<cr> 
+"let Tlist_Hightlight_Tag_On_BufEnter = 1 
+"let Tlist_Enable_Fold_Column = 0 
+"let Tlist_Display_Prototype = 0 
+"let Tlist_Compact_Format = 1 
+
+let Tlist_Show_One_File=1
+let Tlist_OnlyWindow=1
+let Tlist_Use_Right_Window=0
+let Tlist_Sort_Type='name'
+let Tlist_Exit_OnlyWindow=1
+let Tlist_Show_Menu=1
+let Tlist_Max_Submenu_Items=10
+let Tlist_Max_Tag_length=20
+let Tlist_Use_SingleClick=0
+let Tlist_Auto_Open=0
+let Tlist_Close_On_Select=0
+let Tlist_File_Fold_Auto_Close=1
+let Tlist_GainFocus_On_ToggleOpen=0
+let Tlist_Process_File_Always=1
+let Tlist_WinHeight=10
+let Tlist_WinWidth=18
+let Tlist_Use_Horiz_Window=0
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" BufExplorer
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:bufExplorerDefaultHelp=0       " Do not show default help.
+let g:bufExplorerShowRelativePath=1  " Show relative paths.
+let g:bufExplorerSortBy='mru'        " Sort by most recently used.
+let g:bufExplorerSplitRight=0        " Split left.
+let g:bufExplorerSplitVertical=1     " Split vertically.
+let g:bufExplorerSplitVertSize = 30  " Split width
+let g:bufExplorerUseCurrentWindow=1  " Open in new window.
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"=>winManager tool
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:winManagerWindowLayout='FileExplorer,BufExplorer|TagList'   " 这里可以设置为多个窗口, 如'FileExplorer|BufExplorer|TagList'
+let g:persistentBehaviour=0              " 只剩一个窗口时, 退出vim.
+let g:winManagerWidth=20
+let g:defaultExplorer=1
+nmap <silent> <leader>fir :FirstExplorerWindow<cr>
+nmap <silent> <leader>bot :BottomExplorerWindow<cr>
+nmap <silent> wm :WMToggle<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"=>C.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+ let g:C_Ctrl_j   = 'off'
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"add by
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"不适用vi的间键盘模式
+set nocompatible
+
+syntax enable
+
+"现实光标位置
+set ruler
+
+set nohls
+
+set incsearch
+
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,sjis,euc-kr,ucs-2le,latin1,gbk,gb2312
+
+"高亮匹配括号
+set showmatch
+
+set showcmd
+
+"tab键的宽度
+set tabstop=4
+
+"我的状态行显示的内容（包括文件类型和解码）
+set statusline=%F%m%r%h%w\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
+
+" 命令行（在状态行下）的高度，默认为1，这里是2
+set cmdheight=2
+
+nmap y :redo<CR>
+
+nmap wm :WMToggle<cr>
+map <F2>  wm
+
+map <F3>  <C-W><C-W>
+
+" 格式化代码
+map <F8>  100000==
+
+" add function comment
+map <C-F> :DoxFunc<CR>
+
+" add license
+map <C-L> :DoxLicense<CR>
